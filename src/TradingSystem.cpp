@@ -30,31 +30,43 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 
 		if (duration != 0) {
 
-			if (trades->at(i).MaximumProfit > trades->at(i).MaximumLoss * 4 && trades->at(i).ProfitBeforeLoss)
+			double maxProfit = trades->at(i).MaximumProfit;
+			double maxLoss = trades->at(i).MaximumLoss * 2; //weight losing as a bigger deal than gaining
+
+			if (maxProfit > maxLoss && trades->at(i).ProfitBeforeLoss)
 			{
-				//TODO: This is currently tailored for EUR/USD - will need to be changed
-				points += trades->at(i).MaximumProfit / duration * 10;
+				//weight this the highest, for high profit
+				points += (maxProfit - maxLoss) * (100.0  / duration); // increase points by total gain, increment win rate
 				positive++;
 			}
-			else if (trades->at(i).MaximumProfit > trades->at(i).MaximumLoss * 4)
+			else if (maxProfit > maxLoss)
 			{
-				//TODO: This is currently tailored for EUR/USD - will need to be changed
-				points += trades->at(i).MaximumProfit / duration;
+				points += (maxProfit - maxLoss) * (10.0  / duration); // increase points by total gain, but not as highly since loss was before profit
 				positive++;
 			}
 			else
 			{
-				points -= trades->at(i).MaximumLoss  / duration;
+				points += (maxProfit - maxLoss) * (100.0 / duration); //decrease points by total gain, increment loss rate
 				negative++;
 			}
 		}
 	}
 
-	points *= trades->size();
+	//this will weight chromosomes that have high profits but a low pos/negative ratio lower
+	// and loss making chromosomes with a high positive / low negative ratio higher
+	
+	//if it has negative profit, multiply by ratio of negative trades to total trades
+	if (points < 0) {
+		points *= (negative / trades->size());
+	}
+	//if it has positive profit, multiply by ratio of positive trades to total trades
+	else {
+		points *= (positive / trades->size());
+	}
 
 	delete trades;
 
-	return double(positive - negative) * std::abs(points);
+	return points;
 }
 
 BinaryTreeChromosome* TradingSystem::PerformAnalysis(
