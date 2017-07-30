@@ -49,7 +49,7 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 			}
 			else
 			{
-				points -= (maxLoss) / duration; // also scale loss to duration
+				points -= (maxLoss) * 4 / duration; // also scale loss to duration, and weight losses to be considered a bit more carefully
 				negative++;
 			}
 		}
