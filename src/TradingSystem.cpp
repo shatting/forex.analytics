@@ -39,7 +39,7 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 			if (trades->at(i).ProfitBeforeLoss && profitLossRatio > 1) // positive profit, better than no profit!
 			{
 				//weight this the highest, for high profit
-				points += (maxProfit) * 3 * profitLossRatio / duration; // scale profit to duration, weight profit before loss a bit higher
+				points += (maxProfit) * 5 * profitLossRatio / duration; // scale profit to duration, weight profit before loss a bit higher
 				positive++;
 			}
 			else if (profitLossRatio > 1)
@@ -49,7 +49,7 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 			}
 			else
 			{
-				points -= (maxLoss) * 80 / duration; // also scale loss to duration, and weight losses to be considered a bit more carefully
+				points -= (maxLoss) * 70 / duration; // also scale loss to duration, and weight losses to be considered a bit more carefully
 				negative++;
 			}
 		}
@@ -57,7 +57,7 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 
 	delete trades;
 
-	return points * 1000000;
+	return points * 100000;
 }
 
 BinaryTreeChromosome* TradingSystem::PerformAnalysis(
