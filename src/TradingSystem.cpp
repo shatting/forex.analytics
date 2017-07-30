@@ -27,26 +27,29 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 	{
 		int duration = trades->at(i).End->Time - trades->at(i).Start->Time;
 
-
 		if (duration != 0) {
 
 			double maxProfit = trades->at(i).MaximumProfit;
-			double maxLoss = trades->at(i).MaximumLoss * 4; //it doesn't consider it a profit unless it's 4 times the max loss
+			double maxLoss = trades->at(i).MaximumLoss;
+			double profitLossRatio = 1;
+			if (maxLoss != 0) {
+				profitLossRatio = maxProfit / maxLoss;
+			}
 
-			if (maxProfit > maxLoss && trades->at(i).ProfitBeforeLoss)
+			if (trades->at(i).ProfitBeforeLoss && profitLossRatio > 1) // positive profit, better than no profit!
 			{
 				//weight this the highest, for high profit
-				points += (maxProfit - maxLoss) * (250.0  / duration); // increase points by total gain, increment win rate
+				points += (maxProfit) * profitLossRatio * (300.0  / duration);
 				positive++;
 			}
-			else if (maxProfit > maxLoss)
+			else if (profitLossRatio > 1)
 			{
-				points += (maxProfit - maxLoss) * (50.0  / duration); // increase points by total gain, but not as highly since loss was before profit
+				points += (maxProfit) * profitLossRatio * (50.0  / duration);
 				positive++;
 			}
 			else
 			{
-				points += (maxProfit - maxLoss); //decrease points by total gain, increment loss rate, weight significantly higher as bad
+				points -= (maxLoss); //no matter how long it took, loss is bad
 				negative++;
 			}
 		}
@@ -54,7 +57,7 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 
 	delete trades;
 
-	return points * 100000;
+	return points * 1000;
 }
 
 BinaryTreeChromosome* TradingSystem::PerformAnalysis(
