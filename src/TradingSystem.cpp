@@ -31,7 +31,7 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 		if (duration != 0) {
 
 			double maxProfit = trades->at(i).MaximumProfit;
-			double maxLoss = trades->at(i).MaximumLoss * 4; //it doesn't consider it a profit unless it's 4x max loss
+			double maxLoss = trades->at(i).MaximumLoss * 4; //it doesn't consider it a profit unless it's 4 times the max loss
 
 			if (maxProfit > maxLoss && trades->at(i).ProfitBeforeLoss)
 			{
@@ -46,25 +46,12 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 			}
 			else
 			{
-				points += (maxProfit - maxLoss) * (1000.0 / duration); //decrease points by total gain, increment loss rate, weight significantly higher as bad
+				points += (maxProfit - maxLoss) * (400.0 / duration); //decrease points by total gain, increment loss rate, weight significantly higher as bad
 				negative++;
 			}
 		}
 	}
 
-	//this will weight chromosomes that have high profits but a low pos/negative ratio lower
-	// and loss making chromosomes with a high positive / low negative ratio higher
-
-	if (trades->size() > 0) {
-		//if it has negative profit, multiply by ratio of negative trades to total trades
-		if (points < 0) {
-			points *= (negative / trades->size());
-		}
-		//if it has positive profit, multiply by ratio of positive trades to total trades
-		else {
-			points *= (positive / trades->size());
-		}
-	}
 	delete trades;
 
 	return points * 100000;
