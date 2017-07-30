@@ -30,21 +30,21 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 
 		if (duration != 0) {
 
-			if (trades->at(i).MaximumProfit > trades->at(i).MaximumLoss * 2 && trades->at(i).ProfitBeforeLoss)
+			if (trades->at(i).MaximumProfit > trades->at(i).MaximumLoss * 4 && trades->at(i).ProfitBeforeLoss)
 			{
 				//TODO: This is currently tailored for EUR/USD - will need to be changed
-				points += trades->at(i).MaximumProfit / duration * 90 * 10;
+				points += trades->at(i).MaximumProfit / duration * 10;
 				positive++;
 			}
-			else if (trades->at(i).MaximumProfit > trades->at(i).MaximumLoss * 2)
+			else if (trades->at(i).MaximumProfit > trades->at(i).MaximumLoss * 4)
 			{
 				//TODO: This is currently tailored for EUR/USD - will need to be changed
-				points += trades->at(i).MaximumProfit / duration * 90;
+				points += trades->at(i).MaximumProfit / duration;
 				positive++;
 			}
 			else
 			{
-				points -= trades->at(i).MaximumLoss;
+				points -= trades->at(i).MaximumLoss  / duration;
 				negative++;
 			}
 		}
