@@ -54,16 +54,17 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 
 	//this will weight chromosomes that have high profits but a low pos/negative ratio lower
 	// and loss making chromosomes with a high positive / low negative ratio higher
-	
-	//if it has negative profit, multiply by ratio of negative trades to total trades
-	if (points < 0) {
-		points *= (negative / trades->size());
-	}
-	//if it has positive profit, multiply by ratio of positive trades to total trades
-	else {
-		points *= (positive / trades->size());
-	}
 
+	if (trades->size() > 0) {
+		//if it has negative profit, multiply by ratio of negative trades to total trades
+		if (points < 0) {
+			points *= (negative / trades->size());
+		}
+		//if it has positive profit, multiply by ratio of positive trades to total trades
+		else {
+			points *= (positive / trades->size());
+		}
+	}
 	delete trades;
 
 	return points;
