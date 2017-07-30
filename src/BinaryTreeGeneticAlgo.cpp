@@ -24,20 +24,40 @@ void BinaryTreeGeneticAlgo::Select(
 	unsigned size) {
 
 	std::default_random_engine generator;
-	std::uniform_int_distribution<unsigned> distribution(0, this->select);
-
-	for (unsigned i = size - 1, y = 0; i >= size - this->select; i--, y++) {
-		newGeneration->at(y)->setFitness(oldGeneration->at(i)->getFitness());
-		oldGeneration->at(i)->copyTo(newGeneration->at(y));
-
+	
+	std::vector<BinaryTreeChromosome*> listChromos;
+	
+	for (unsigned i = size - 1; i >= 0; i--, y++) {
+		double comp = static_cast<double>(rand() % 100) / 100;
+		if (comp < .8) {
+			listChromos.push_back(oldGeneration->at(i));
+		}
+		if (listChromos.size >= this->select)
+			break;
 	}
 
-	for (unsigned i = this->select; i < size; i++) {
+	int count = 0;
+	if (listChromos.size < this->select) {
+		count = listChromos.size;
+	}
+	else {
+		count = this->select;
+	}
+	std::uniform_int_distribution<unsigned> distribution(0, count);
+
+	for (unsigned i = count, y = 0; i >= 0; i--, y++) {
+		newGeneration->at(y)->setFitness(listChromos.at(i)->getFitness());
+		listChromos.at(i)->copyTo(newGeneration->at(y));
+	}
+
+	for (unsigned i = count; i < size; i++) {
 		unsigned index = distribution(generator);
 		this->Mutate(newGeneration, index, newGeneration->at(i));
 	}
 
 	this->Crossover(newGeneration);
+
+	delete listChromos;
 }
 
 void BinaryTreeGeneticAlgo::Mutate(
