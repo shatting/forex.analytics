@@ -27,27 +27,27 @@ void BinaryTreeGeneticAlgo::Select(
 	
 	std::vector<BinaryTreeChromosome*> listChromos;
 	
-	for (unsigned i = size - 1; i >= 0; i--, y++) {
+	for (int i = size - 1; i >= 0; i--) {
 		double comp = static_cast<double>(rand() % 100) / 100;
 		if (comp < .8) {
 			listChromos.push_back(oldGeneration->at(i));
 		}
-		if (listChromos.size >= this->select)
+		if (listChromos.size() >= this->select)
 			break;
 	}
 
 	int count = 0;
-	if (listChromos.size < this->select) {
-		count = listChromos.size;
+	if (listChromos.size() < this->select) {
+		count = listChromos.size();
 	}
 	else {
 		count = this->select;
 	}
 	std::uniform_int_distribution<unsigned> distribution(0, count);
 
-	for (unsigned i = count, y = 0; i >= 0; i--, y++) {
-		newGeneration->at(y)->setFitness(listChromos.at(i)->getFitness());
-		listChromos.at(i)->copyTo(newGeneration->at(y));
+	for (int i = 0; i < count; i++) {
+		newGeneration->at(i)->setFitness(listChromos.at(i)->getFitness());
+		listChromos.at(i)->copyTo(newGeneration->at(i));
 	}
 
 	for (unsigned i = count; i < size; i++) {
@@ -56,8 +56,6 @@ void BinaryTreeGeneticAlgo::Select(
 	}
 
 	this->Crossover(newGeneration);
-
-	delete listChromos;
 }
 
 void BinaryTreeGeneticAlgo::Mutate(
