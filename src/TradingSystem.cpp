@@ -31,17 +31,17 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 		if (duration != 0) {
 
 			double maxProfit = trades->at(i).MaximumProfit;
-			double maxLoss = trades->at(i).MaximumLoss * 2; //weight losing as a bigger deal than gaining
+			double maxLoss = trades->at(i).MaximumLoss * 3; //it doesn't consider it a profit unless it's 2x max loss
 
 			if (maxProfit > maxLoss && trades->at(i).ProfitBeforeLoss)
 			{
 				//weight this the highest, for high profit
-				points += (maxProfit - maxLoss) * (100.0  / duration); // increase points by total gain, increment win rate
+				points += (maxProfit - maxLoss) * (200.0  / duration); // increase points by total gain, increment win rate
 				positive++;
 			}
 			else if (maxProfit > maxLoss)
 			{
-				points += (maxProfit - maxLoss) * (10.0  / duration); // increase points by total gain, but not as highly since loss was before profit
+				points += (maxProfit - maxLoss) * (100.0  / duration); // increase points by total gain, but not as highly since loss was before profit
 				positive++;
 			}
 			else
@@ -67,7 +67,7 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 	}
 	delete trades;
 
-	return points;
+	return points * 1000;
 }
 
 BinaryTreeChromosome* TradingSystem::PerformAnalysis(
