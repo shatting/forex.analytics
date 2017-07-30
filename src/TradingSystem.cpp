@@ -39,17 +39,17 @@ inline double EvaluateFitness(FitnessFunctionArgs args)
 			if (trades->at(i).ProfitBeforeLoss && profitLossRatio > 1) // positive profit, better than no profit!
 			{
 				//weight this the highest, for high profit
-				points += (maxProfit) * profitLossRatio * (300.0  / duration);
+				points += (maxProfit) * profitLossRatio * (30.0  / duration); // scale profit to duration
 				positive++;
 			}
 			else if (profitLossRatio > 1)
 			{
-				points += (maxProfit) * profitLossRatio * (50.0  / duration);
+				points += (maxProfit) * profitLossRatio * (5.0  / duration); // ^ as above
 				positive++;
 			}
 			else
 			{
-				points -= (maxLoss); //no matter how long it took, loss is bad
+				points -= (maxLoss) / duration; // also scale loss to duration
 				negative++;
 			}
 		}
