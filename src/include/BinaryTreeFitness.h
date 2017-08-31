@@ -9,23 +9,20 @@
 */
 struct FitnessFunctionArgs {
 public:
-	BinaryTreeChromosome* chromosome;
-	const std::vector<std::unordered_map<std::string, double>>* data;
-	const std::vector<double>* closePrices;
-	double pipInDecimals;
-	double spread;
+    BinaryTreeChromosome *chromosome;
+    const std::vector<std::unordered_map<std::string, double>> *data;
+    const std::vector<double> *closePrices;
+    double pipInDecimals;
+    double spread;
 
-	FitnessFunctionArgs(
-		BinaryTreeChromosome* chromosome,
-		const std::vector<std::unordered_map<std::string, double>>* data,
-		const std::vector<double>* closePrices,
-		double pipInDecimals, double spread) {
+    FitnessFunctionArgs(BinaryTreeChromosome *chromosome, const std::vector<std::unordered_map<std::string, double>> *data, const std::vector<double> *closePrices, double pipInDecimals, double spread) {
 
-		this->chromosome = chromosome;
-		this->data = data;
-		this->pipInDecimals = pipInDecimals;
-		this->spread = spread;
-	}
+        this->chromosome = chromosome;
+        this->data = data;
+        this->pipInDecimals = pipInDecimals;
+        this->spread = spread;
+        this->closePrices = closePrices;
+    }
 };
 
 /**
@@ -37,47 +34,39 @@ typedef double(*FitnessFunction)(FitnessFunctionArgs args);
 /**
  * Describes a fitness evaluator wrapping over a fitness function
  */
-class BinaryTreeFitness
-{
+class BinaryTreeFitness {
 private:
 
-	double pipInDecimals;
-	double spread;
+    double pipInDecimals;
+    double spread;
 
-	/**
-	 * Pointer to a fitness function
-	 */
-	FitnessFunction eval;
+/**
+ * Pointer to a fitness function
+ */
+    FitnessFunction eval;
 
-	/**
-	 * Dataset used for calculating fitness
-	 */
-	const std::vector<std::unordered_map<std::string, double>>* data;
+/**
+ * Dataset used for calculating fitness
+ */
+    const std::vector<std::unordered_map<std::string, double>> *data;
 
-	const std::vector<double>* closePrices;
+    const std::vector<double> *closePrices;
 
 public:
 
-	/**
-	 * Creates a new instance of BinaryTreeFitness combining test values and
-	 * fitness evaluation function
-	 *
-	 * @param  eval    Pointer to a fitness evaluation function
-	 * @param  dataSet Vector of a pregenerated test data
-	 */
-	BinaryTreeFitness(
-		FitnessFunction eval,
-		const std::vector<std::unordered_map<std::string, double>>* data,
-		const std::vector<double>* closePrices,
-		double pipInDecimals,
-  	double spread
-		);
+/**
+ * Creates a new instance of BinaryTreeFitness combining test values and
+ * fitness evaluation function
+ *
+ * @param  eval    Pointer to a fitness evaluation function
+ * @param  dataSet Vector of a pregenerated test data
+ */
+    BinaryTreeFitness(FitnessFunction eval, const std::vector<std::unordered_map<std::string, double>> *data, const std::vector<double> *closePrices, double pipInDecimals, double spread);
 
-	/**
-	 * Calculates the fitnesss value for a specific set of chromosomes
-	 * @param chromosomes Vector of potiners to a set of chromosomes
-	 *                    forming a generation
-	 */
-	void CalculateFitness(
-		const std::vector<BinaryTreeChromosome*>* chromosomes) const;
+/**
+ * Calculates the fitnesss value for a specific set of chromosomes
+ * @param chromosomes Vector of potiners to a set of chromosomes
+ *                    forming a generation
+ */
+    void CalculateFitness(const std::vector<BinaryTreeChromosome *> *chromosomes) const;
 };

@@ -4,31 +4,34 @@
 
 #include "TreeNode.h"
 
-enum Operator {  And = 0,  Or = 1, Xor = 2};
-static const char * OperatorStrings[] = { "And", "Or", "Xor"};
+enum Operator {
+    And = 0, Or = 1, Xor = 2
+};
+static const char *OperatorStrings[] = {"And", "Or", "Xor"};
 
-class OperatorTreeNode :
-    public TreeNode
-{
+class OperatorTreeNode : public TreeNode {
 public:
-Operator value;
+    Operator value;
 
-std::uniform_int_distribution<int> operator_dist;
+    std::uniform_int_distribution<int> operator_dist;
 
-OperatorTreeNode();
-~OperatorTreeNode();
+    OperatorTreeNode();
 
-// Inherited via TreeNode
-virtual bool Evaluate(
-    const std::unordered_map<std::string, double>& data) const override;
-
-virtual void GenerateRandomValue() override;
+    ~OperatorTreeNode();
 
 // Inherited via TreeNode
-virtual void Copy(TreeNode * destination) const override;
-virtual TreeNode * Copy() const override;
+    virtual bool Evaluate(const std::unordered_map<std::string, double> &data) const override;
 
-virtual void ToJs(v8::Local<v8::Object>& object) const override;
+    virtual void GenerateRandomValue() override;
 
-static TreeNode * FromJs(const v8::Local<v8::Object>& input);
+    virtual std::string toString() const override;
+
+    // Inherited via TreeNode
+    virtual void CopyTo(TreeNode *destination) const override;
+
+    virtual TreeNode *Copy() const override;
+
+    virtual void ToJs(v8::Local<v8::Object> &object) const override;
+
+    static TreeNode *FromJs(const v8::Local<v8::Object> &input);
 };

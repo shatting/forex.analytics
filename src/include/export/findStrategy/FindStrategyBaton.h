@@ -16,30 +16,33 @@ const double DEFAULT_LOGICAL_NODE_MUTATION_PROBABILITY = 0.3;
 const double DEFAULT_LEAF_INDICATOR_MUTATION_PROBABILITY = 0.2;
 const double DEFAULT_CROSSOVER_PROBABILITY = 0.03;
 const double DEFAULT_SPREAD = 0.0;
+const double DEFAULT_PIP_IN_DECIMALS = 0.001;
 
-class FindStrategyBaton
-{
+class FindStrategyBaton {
 public:
-	Nan::Callback* progress;
-	BinaryTreeChromosome* chromosome;
-	BinaryTreeChromosome* startingChromosome;
-	std::vector<std::unordered_map<std::string, double>> input;
-	std::vector<std::string> inputTypes;
-	std::vector<double> closeValues;
-	const char* errorMessage;
-	unsigned populationCount;
-	unsigned generationCount;
-	unsigned selectionAmount;
-	double leafValueMutationProbability;
-	double leafSignMutationProbability;
-	double logicalNodeMutationProbability;
-	double leafIndicatorMutationProbability;
-	double crossoverProbability;
-	double spread;
-	double pipInDecimals;
+    Nan::Callback *progress;
+    Nan::Callback *callback;
+    BinaryTreeChromosome *chromosome;
+    BinaryTreeChromosome *startingChromosome;
+    std::vector<std::unordered_map<std::string, double>> input;
+    std::vector<std::string> indicatorNames;
+    std::unordered_map<std::string,double> indicatorMin;
+    std::unordered_map<std::string,double> indicatorMax;
+    std::vector<double> closeValues;
+    const char *errorMessage;
+    unsigned populationCount;
+    unsigned generationCount;
+    unsigned selectionAmount;
+    double leafValueMutationProbability;
+    double leafSignMutationProbability;
+    double logicalNodeMutationProbability;
+    double leafIndicatorMutationProbability;
+    double crossoverProbability;
+    double spread;
+    double pipInDecimals;
 
-	FindStrategyBaton();
-	void PopulateFrom(v8::Handle<v8::Object> configuration);
+    FindStrategyBaton(v8::Handle<v8::Array> closePrices, v8::Handle<v8::Object> indicatorToValues, v8::Handle<v8::Object> configuration, Nan::Callback * progress, Nan::Callback * callback);
+
 };
 
 #endif

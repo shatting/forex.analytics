@@ -15,8 +15,7 @@ First if you don't have it yet. Install node-gyp for comiling the c++ source cod
 npm install -g node-gyp
 ```
 
-Then run the install npm command to download and install all dependencies. It also compiles
-the ta-lib dependency and builds the source code
+Then run the install npm command to download and install all dependencies.
 
 ```
 npm install
@@ -60,19 +59,24 @@ import analytics from 'forex.analytics'
 ```
 Analytics object will give you several functions to use.
 
-findStrategy(candlesticks, options, progressCallback)
+findStrategy(closeValues, indicatorData, options, progressCallback, callback)
 ---------------
 
-Finds the optimal strategy for a certain period defined by the *candlesticks* array.
+Finds the optimal strategy for a certain period defined by the *closeValues* array.
 
-**candlesticks** parameter should contain an array of objects representing one candlestick in OHLC chart.
+**closeValues** parameter should contain an array of values representing close values.
+```javascript
+    [1.113990, 1.113990, 1.113890, 1.113890, 1435701600]
+}
+```
+
+**indicatorData** parameter contains a hash mapping indicator names to their values.
 ```javascript
 {
-  open: 1.113990,
-  high: 1.113990,
-  low: 1.113890,
-  close: 1.113890,
-  time: 1435701600
+    'CCI' : [1.234,5.678,..],
+    'MACD': [1.234,5.678,..],
+    'RSI': [1.234,5.678,..],
+    'myindicator': [1.234,5.678,..]
 }
 ```
 
@@ -87,7 +91,6 @@ Finds the optimal strategy for a certain period defined by the *candlesticks* ar
  logicalNodeMutationProbability: 0.3,
  leafIndicatorMutationProbability: 0.2,
  crossoverProbability: 0.03,
- indicators: [ 'CCI', 'MACD', 'RSI', 'SMA15_SMA50' ],
  strategy: { buy : {...}, sell : {...} },
  pipInDecimals : 0.001,
  spread : 3
@@ -117,11 +120,11 @@ Finds the optimal strategy for a certain period defined by the *candlesticks* ar
 Fitness: 0.00010751596495091384; Generation: 285
  ```
 
-The returning value is a promise which when it's resolved passes one argument with the best found strategy.
+**callback** parameter has to be a function.
 
 **Full example:**
 ```javascript
-analytics.findStrategy(candlesticks, {
+analytics.findStrategy(closeValues, indicatorData, {
   populationCount: 100,
   generationCount: 300,
   selectionAmount: 10,
@@ -130,14 +133,12 @@ analytics.findStrategy(candlesticks, {
   logicalNodeMutationProbability: 0.3,
   leafIndicatorMutationProbability: 0.2,
   crossoverProbability: 0.03,
-  indicators: indicators,
   pipInDecimals : 0.001,
   spread : 3
 
 }, function(strategy, fitness, generation) {
   console.log('Fitness: ' + fitness + '; Generation: ' + generation);
-})
-.then(function(strategy) {
+}, function(err, strategy) {
   console.log('------------Strategy-------------')
   console.log(strategy);
 });
@@ -262,20 +263,25 @@ function ticksTo1MOhlc(ticks) {
 }
 ```
 
-getMarketStatus(candlesticks, options)
+result = getMarketStatus(closeValues, indicatorData, options)
 ---------------
 
-Returns suggestion whether to buy or sell current for the last candlestick in the
-**candlesticks** array passed in as a first parameter.
+Returns suggestion whether to buy or sell current for the last value in the
+**closeValues** array passed in as a first parameter.
 
-**candlesticks** parameter should contain an array of objects representing one candlestick in OHLC chart.
+**closeValues** parameter should contain an array of values representing close values.
+```javascript
+    [1.113990, 1.113990, 1.113890, 1.113890, 1435701600]
+}
+```
+
+**indicatorData** parameter contains a hash mapping indicator names to their values.
 ```javascript
 {
-  open: 1.113990,
-  high: 1.113990,
-  low: 1.113890,
-  close: 1.113890,
-  time: 1435701600
+    'CCI' : [1.234,5.678,..],
+    'MACD': [1.234,5.678,..],
+    'RSI': [1.234,5.678,..],
+    'myindicator': [1.234,5.678,..]
 }
 ```
 
@@ -289,7 +295,7 @@ Returns suggestion whether to buy or sell current for the last candlestick in th
 
 **Example:**
 ```javascript
-var status = analytics.getMarketStatus(candlesticks, { strategy: strategy });
+var status = analytics.getMarketStatus(closeValues, indicatorData, { strategy: strategy });
 console.log(status);
 ```
 Can output:
@@ -297,23 +303,26 @@ Can output:
 { shouldBuy: true, shouldSell: false }
 ```
 
-getTrades(candlesticks, options)
+trades = getTrades(closeValues, indicatorData, options)
 ---------------
 
-Returns an array of trades that were performed on a provided candlestick array
-with given strategy
-**candlesticks** array passed in as a first parameter.
+Returns an array of trades that were performed on the provided
+**closeValues** array passed in as a first parameter.
 
-**candlesticks** parameter should contain an array of objects representing one candlestick in OHLC chart.
+**closeValues** parameter should contain an array of values representing close values.
 ```javascript
-{
-  open: 1.113990,
-  high: 1.113990,
-  low: 1.113890,
-  close: 1.113890,
-  time: 1435701600
+    [1.113990, 1.113990, 1.113890, 1.113890, 1435701600]
 }
 ```
+
+**indicatorData** parameter contains a hash mapping indicator names to their values.
+```javascript
+{
+    'CCI' : [1.234,5.678,..],
+    'MACD': [1.234,5.678,..],
+    'RSI': [1.234,5.678,..],
+    'myindicator': [1.234,5.678,..]
+}
 
 **options** parameter lists one property
 ```javascript
@@ -325,7 +334,7 @@ with given strategy
 
 **Example:**
 ```javascript
-var trades = analytics.getTrades(candlesticks, {
+var trades = analytics.getTrades(closeValues, indicatorData, {
   strategy: strategy
 });
 console.log(trades);

@@ -6,69 +6,77 @@
 
 std::random_device TreeNode::r;
 
-TreeNode::TreeNode()
-{
-	std::seed_seq seed{ r(), r(), r(), r(), r(), r(), r(), r() };
-	this->engine = std::mt19937(seed);
+TreeNode::TreeNode() {
+    std::seed_seq seed{r(), r(), r(), r(), r(), r(), r(), r()};
+    this->engine = std::mt19937(seed);
 
-	this->left = nullptr;
-	this->right = nullptr;
+    this->left = nullptr;
+    this->right = nullptr;
 }
 
-TreeNode::~TreeNode()
-{
-	if (this->left != nullptr)
-		delete this->left;
+TreeNode::~TreeNode() {
+    if(this->left != nullptr)
+        delete this->left;
 
-	if (this->right != nullptr)
-		delete this->right;
+    if(this->right != nullptr)
+        delete this->right;
 }
 
-void TreeNode::ToJs(v8::Local<v8::Object>& input) const {
+std::string TreeNode::toString() const {
+    std::string result = "";
+    if(left != nullptr)
+        result += "left: " + left->toString();
 
-	if (this->left != nullptr) {
-		v8::Local<v8::Object> left = Nan::New<v8::Object>();
+    if(right != nullptr)
+        result += "right: " + right->toString();
 
-		this->left->ToJs(left);
-
-		input->Set(Nan::New<v8::String>("left").ToLocalChecked(), left);
-	}
-
-	if (this->right != nullptr) {
-		v8::Local<v8::Object> right = Nan::New<v8::Object>();
-
-		this->right->ToJs(right);
-
-		input->Set(Nan::New<v8::String>("right").ToLocalChecked(), right);
-	}
+    return result;
 }
 
-TreeNode* TreeNode::FromJs(
-	const std::vector<std::string>& indicators,
-	const v8::Local<v8::Object>& input) {
+void TreeNode::ToJs(v8::Local<v8::Object> &input) const {
 
-	//try to parse operator tree node first
-	TreeNode* node = OperatorTreeNode::FromJs(input);
+    if(this->left != nullptr) {
+        v8::Local<v8::Object> left = Nan::New<v8::Object>();
 
-	if (node == nullptr) {
-		node = IndicatorTreeNode::FromJs(indicators, input);
-	}
+        this->left->ToJs(left);
 
-	if (input->Has(Nan::New<v8::String>("left").ToLocalChecked())) {
+        input->Set(Nan::New<v8::String>("left").ToLocalChecked(), left);
+    }
 
-		v8::Handle<v8::Object> left =
-			v8::Handle<v8::Object>::Cast(input->Get(Nan::New<v8::String>("left").ToLocalChecked()));
+    if(this->right != nullptr) {
+        v8::Local<v8::Object> right = Nan::New<v8::Object>();
 
-		node->left = TreeNode::FromJs(indicators, left);
-	}
+        this->right->ToJs(right);
 
-	if (input->Has(Nan::New<v8::String>("right").ToLocalChecked())) {
+        input->Set(Nan::New<v8::String>("right").ToLocalChecked(), right);
+    }
+}
 
-		v8::Handle<v8::Object> right =
-			v8::Handle<v8::Object>::Cast(input->Get(Nan::New<v8::String>("right").ToLocalChecked()));
+TreeNode *TreeNode::FromJs(const std::vector<std::string> &indicatorNames,
+                           const std::unordered_map<std::string, double> &indicatorMin,
+                           const std::unordered_map<std::string, double> &indicatorMax,
+                           const v8::Local<v8::Object> &input) {
 
-		node->right = TreeNode::FromJs(indicators, right);
-	}
+    //try to parse operator tree node first
+    TreeNode *node = OperatorTreeNode::FromJs(input);
 
-	return node;
+    if(node == nullptr) {
+        node = IndicatorTreeNode::FromJs(indicatorNames, indicatorMin, indicatorMax, input);
+    }
+
+    if(input->Has(Nan::New<v8::String>("left").ToLocalChecked())) {
+
+        v8::Handle<v8::Object> left = v8::Handle<v8::Object>::Cast(input->Get(Nan::New<v8::String>("left").ToLocalChecked()));
+
+        node->left = TreeNode::FromJs(indicatorNames, indicatorMin, indicatorMax, left);
+    }
+
+    if(input->Has(Nan::New<v8::String>("right").ToLocalChecked())) {
+
+        v8::Handle<v8::Object> right = v8::Handle<v8::Object>::Cast(input->Get(Nan::New<v8::String>("right").ToLocalChecked()));
+
+        node->right = TreeNode::FromJs(indicatorNames, indicatorMin, indicatorMax, right);
+    }
+
+    return node;
 }

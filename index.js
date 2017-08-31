@@ -5,7 +5,7 @@ var convertOhlc = require('./src/js/convertOhlc')
  * Translate findStrategy callback signature to promise due to weird behaviour
  * in native where promises for some reason weren't resolved
  */
-function findStrategy() {
+/*function findStrategy() {
   const args = arguments
 
   return new Promise((resolve, reject) => {
@@ -13,17 +13,16 @@ function findStrategy() {
     function cb(result, error) {
       result ? resolve(result) : reject(error)
     }
-
-    const a = [args[0], args[1], args[2], cb]
+    const a = [args[0], args[1], args[2], args[3], cb]
 
     analytics.findStrategy.apply(this, a)
   })
-}
+}*/
 
 
 module.exports = {
   convertOHLC : convertOhlc,
   getMarketStatus : analytics.getMarketStatus,
   getTrades : analytics.getTrades,
-  findStrategy : findStrategy
+  findStrategy : analytics.findStrategy
 }

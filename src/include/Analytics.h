@@ -13,8 +13,7 @@
  * TradingSystem class groups all the more specific classes to one simple
  * interface
  */
-class Analytics
-{
+class Analytics {
 public:
 
 /**
@@ -64,25 +63,25 @@ public:
 
  * @return                                  The best fit chromosome found
  */
-BinaryTreeChromosome* PerformAnalysis(
-        const std::vector<double>& closeValues,
-        const std::vector<std::string>& indicators,
-        const std::vector<std::unordered_map<std::string, double>> indicatorData,
-        unsigned populationCount,
-        unsigned generationCount,
-        unsigned selectionAmount,
-        double leafValueMutationProbability,
-        double leafSignMutationProbability,
-        double logicalNodeMutationProbability,
-        double leafIndicatorMutationProbability,
-        double crossoverProbability,
-        double pipInDecimals,
-        double spread,
-        BinaryTreeChromosome* chromosomeToStartWith,
-        std::function<void(
-          double fitness,
-          BinaryTreeChromosome * chromosome,
-          int generation)> update);
+    BinaryTreeChromosome *
+    PerformAnalysis(const std::vector<double> &closeValues,
+                    const std::vector<std::string> &indicatorNames,
+                    const std::unordered_map<std::string, double> &indicatorMin,
+                    const std::unordered_map<std::string, double> &indicatorMax,
+                    const std::vector<std::unordered_map<std::string, double>> &indicatorData,
+                    unsigned populationCount,
+                    unsigned generationCount,
+                    unsigned selectionAmount,
+                    double leafValueMutationProbability,
+                    double leafSignMutationProbability,
+                    double logicalNodeMutationProbability,
+                    double leafIndicatorMutationProbability,
+                    double crossoverProbability,
+                    double pipInDecimals,
+                    double spread,
+                    BinaryTreeChromosome *chromosomeToStartWith,
+                    std::function<void(double fitness, BinaryTreeChromosome *chromosome, int generation)> update
+    );
 };
 
 #endif

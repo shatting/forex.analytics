@@ -13,7 +13,7 @@
   "scripts": {
     "postinstall": "node-gyp configure && node-gyp build",
     "test": "node mocha",
-    "cppcheck" : "cppcheck --enable=all src"
+    "cppcheck": "cppcheck --enable=all src"
   },
   "gypfile": true,
   "keywords": [

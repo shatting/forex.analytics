@@ -257,3 +257,5 @@ build
 *.tlog
 *.lib
 *.a
+cmake-build-debug
+CMakeLists.txt
