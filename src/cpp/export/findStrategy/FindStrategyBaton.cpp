@@ -20,6 +20,7 @@ FindStrategyBaton::FindStrategyBaton(v8::Handle<v8::Array> closePrices, v8::Hand
     this->crossoverProbability = getNumberOrDefault(configuration, "crossoverProbability", DEFAULT_CROSSOVER_PROBABILITY);
     this->spread = getNumberOrDefault(configuration, "spread", DEFAULT_SPREAD);
     this->pipInDecimals = getNumberOrDefault(configuration, "pipInDecimals", DEFAULT_PIP_IN_DECIMALS);
+    this->treeHeight = getIntOrDefault(configuration, "treeHeight", DEFAULT_TREE_HEIGHT);
 
     this->progress = progress;
     this->callback = callback;

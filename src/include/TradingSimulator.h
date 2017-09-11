@@ -25,29 +25,7 @@ public:
 
     double EndPrice;
 
-/**
- * Is true when a trades was started with a buy action and false it with sell
- */
-    bool Buy;
-
-/**
- * Defines the maximum loss during the trade
- */
-    double MaximumLoss;
-
-/**
- * Defines the maximum profit during the trade
- */
-    double MaximumProfit;
-
-    bool ProfitBeforeLoss;
-
-/**
- * Gets the total revenue of the performed trade
- * @return double value in pips specifying the trade's revenue
- */
-    double getRevenue() const;
-
+    double revenue;
 /**
  * Converts a vector of trades to a v8 array
  * @param trades  The input vector if trades

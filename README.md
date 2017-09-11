@@ -334,9 +334,7 @@ Returns an array of trades that were performed on the provided
 
 **Example:**
 ```javascript
-var trades = analytics.getTrades(closeValues, indicatorData, {
-  strategy: strategy
-});
+var trades = analytics.getTrades(closeValues, indicatorData, {strategy: strategy});
 console.log(trades);
 ```
 

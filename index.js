@@ -1,5 +1,7 @@
-var analytics = require('./build/Release/analytics.node')
-var convertOhlc = require('./src/js/convertOhlc')
+var analytics = require('./build/Release/analytics.node');
+var convertOhlc = require('./src/js/convertOhlc');
+
+require("segfault-handler").registerHandler("crash.log");
 
 /**
  * Translate findStrategy callback signature to promise due to weird behaviour

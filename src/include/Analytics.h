@@ -79,6 +79,7 @@ public:
                     double crossoverProbability,
                     double pipInDecimals,
                     double spread,
+                    int treeHeight,
                     BinaryTreeChromosome *chromosomeToStartWith,
                     std::function<void(double fitness, BinaryTreeChromosome *chromosome, int generation)> update
     );

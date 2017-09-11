@@ -45,6 +45,7 @@ void FindStrategyAsyncWorker::Execute(const ExecutionProgress &execProgress) {
                 baton->crossoverProbability,
                 baton->pipInDecimals,
                 baton->spread,
+                baton->treeHeight,
                 baton->startingChromosome,
                 update
         );

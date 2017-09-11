@@ -51,12 +51,12 @@ bool findStrategyValidateInput(const Nan::FunctionCallbackInfo<v8::Value> &args)
     }
 
     if(!args[3]->IsUndefined() && (!args[3]->IsFunction())) {
-        Nan::ThrowTypeError("Wrong fourth argument. Expecting a function");
+        Nan::ThrowTypeError("Wrong fourth argument. Expecting and update callbac)");
         return false;
     }
 
     if(!args[4]->IsUndefined() && (!args[4]->IsFunction())) {
-        Nan::ThrowTypeError("Wrong fifth argument. Expecting a function");
+        Nan::ThrowTypeError("Wrong fifth argument. Expecting a callback");
         return false;
     }
 

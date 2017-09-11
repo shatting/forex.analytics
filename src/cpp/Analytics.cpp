@@ -23,6 +23,7 @@ BinaryTreeChromosome * Analytics::PerformAnalysis(
         double crossoverProbability,
         double pipInDecimals,
         double spread,
+        int treeHeight,
         BinaryTreeChromosome *chromosomeToStartWith,
         std::function<void(double fitness, BinaryTreeChromosome *chromosome, int generation)> update
 ) {
@@ -51,8 +52,8 @@ BinaryTreeChromosome * Analytics::PerformAnalysis(
     }
 
     for (unsigned i = 0; i < populationCount; i++) {
-        front_buffer[i]->createRandom(3, indicatorNames, indicatorMin, indicatorMax); // todo: tree height param
-        back_buffer[i]->createRandom(3, indicatorNames, indicatorMin, indicatorMax);
+        front_buffer[i]->createRandom(treeHeight, indicatorNames, indicatorMin, indicatorMax); // todo: tree height param
+        back_buffer[i]->createRandom(treeHeight, indicatorNames, indicatorMin, indicatorMax);
     }
 
 

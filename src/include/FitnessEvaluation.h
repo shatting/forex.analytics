@@ -23,15 +23,16 @@ inline double EvaluateFitness(FitnessFunctionArgs args) {
     double points = 0;
 
     for (unsigned long i = 0; i < trades->size(); i++) {
-        int duration = trades->at(i).End - trades->at(i).Start;
-        double spreadValue = args.pipInDecimals * args.spread;
-        double revenue = trades->at(i).getRevenue() - spreadValue;
+        Trade * trade = &trades->at(i);
+        int duration =trade->End - trade->Start;
+        trade->revenue = trade->EndPrice*(1 - args.pipInDecimals) - trade->StartPrice*(1 + args.pipInDecimals);
 
-        if(revenue > 0) {
-            points += 1.0 / duration;
+        points += 100*trade->revenue;
+        /*if(trade->revenue > 0) {
+            points += 100*trade->revenue / duration;
         } else {
-            points -= 3.5 / duration;
-        }
+            points += 400*trade->revenue / duration;
+        }*/
     }
 
     double fitness = points;

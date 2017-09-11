@@ -17,6 +17,7 @@ const double DEFAULT_LEAF_INDICATOR_MUTATION_PROBABILITY = 0.2;
 const double DEFAULT_CROSSOVER_PROBABILITY = 0.03;
 const double DEFAULT_SPREAD = 0.0;
 const double DEFAULT_PIP_IN_DECIMALS = 0.001;
+const double DEFAULT_TREE_HEIGHT = 3;
 
 class FindStrategyBaton {
 public:
@@ -39,6 +40,7 @@ public:
     double leafIndicatorMutationProbability;
     double crossoverProbability;
     double spread;
+    int treeHeight;
     double pipInDecimals;
 
     FindStrategyBaton(v8::Handle<v8::Array> closePrices, v8::Handle<v8::Object> indicatorToValues, v8::Handle<v8::Object> configuration, Nan::Callback * progress, Nan::Callback * callback);
